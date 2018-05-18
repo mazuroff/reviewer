@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Reviewer.Core.Interfaces;
+using Reviewer.Core.Models;
 
 namespace Reviewer.Api.Controllers
 {
@@ -10,9 +8,25 @@ namespace Reviewer.Api.Controllers
     [Route("api/auth")]
     public class AuthController : Controller
     {
-        public IActionResult Login()
+        private readonly ITokenService _tokenService;
+
+        public AuthController(ITokenService tokenService)
         {
-            return View();
+            _tokenService = tokenService;
+        }
+
+        [HttpPost]
+        [Route("token")]
+        [ProducesResponseType(typeof(TokenModel), 200)]
+        public IActionResult Login([FromBody] LoginCredentials loginCredentials)
+        {
+            var token = _tokenService.GetToken(loginCredentials);
+
+            if (token != null)
+            {
+                return Ok(token);
+            }
+            return BadRequest();
         }
     }
 }

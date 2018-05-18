@@ -9,7 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Reviewer.Api.Extensions;
 using Reviewer.CompsitionRoot;
+using Reviewer.Core.Options;
 using Reviewer.DAL.Infrastructure;
 
 namespace Reviewer.Api
@@ -31,6 +33,7 @@ namespace Reviewer.Api
         {
             Compositor compositor = new Compositor();
             compositor.Compose(services);
+            ConfigureOptions(services);
 
             services.AddDbContext<ReviewerDbContext>(o =>
             {
@@ -54,6 +57,12 @@ namespace Reviewer.Api
             }
 
             app.UseMvc();
+        }
+
+        private void ConfigureOptions(IServiceCollection services)
+        {
+            services.ConfigureFromSection<JwtOptions>(Configuration);
+            services.ConfigureFromSection<CryptoOptions>(Configuration);
         }
     }
 }

@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Reviewer.Core\Reviewer.Core.csproj" />
     <ProjectReference Include="..\Reviewer.DAL\Reviewer.DAL.csproj" />
   </ItemGroup>
 
